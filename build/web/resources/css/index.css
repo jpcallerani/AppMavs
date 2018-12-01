@@ -1,0 +1,46 @@
+@font-face {
+  font-family: 'Bree Serif';
+  font-style: normal;
+  font-weight: 400;
+  src: url("#{resource['font:Bree Serif.woff']}");
+}
+
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background-image: url("#{resource['images:bg_index.png']}") !important;
+}
+#footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background-image: url("#{resource['images:bg_index.png']}") !important;
+}
+
+
+#content {
+    position: fixed;
+    top: 80px;
+    bottom: 100px;
+    left: 0;
+    right: 0;
+    background-image: url("#{resource['images:old.png']}");
+    overflow: auto;
+}
+
+#panel_login {
+    position: relative;
+    top: 20px;
+    right: 50px;
+    font-size: 13px;
+    float: right;
+}
+
+.font_padrao {
+    font-family: Lucida Grande,Lucida Sans,Arial,sans-serif !important;
+}

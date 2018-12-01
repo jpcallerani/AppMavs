@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <!--<property name="hibernate.connection.url">jdbc:mysql://10.197.69.49:3306/mundofac_1?autoReconnect=true</property>-->
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/mundofac_1?autoReconnect=true</property>
+        <!--<property name="hibernate.connection.username">mundofacom</property>-->
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">[mavericks]</property>
+        <!--<property name="hibernate.connection.password">muMi@130c2</property>-->
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+        
+        <property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+        <property name="c3p0.idle_test_period">100</property> 
+        <property name="c3p0.preferredTestQuery">select 1;</property>
+        
+        <mapping class="br.com.mavs.Modal.SloginUsers"/>
+        <mapping class="br.com.mavs.Modal.SpositionsOffense"/>
+        <mapping class="br.com.mavs.Modal.Snumber"/>
+        <mapping class="br.com.mavs.Modal.SjogadorTreino"/>
+        <mapping class="br.com.mavs.Modal.Streino"/>
+        <mapping class="br.com.mavs.Modal.SjogadorMensalidade"/>
+        <mapping class="br.com.mavs.Modal.Smensalidade"/>
+        <mapping class="br.com.mavs.Modal.Sboleto"/>
+        <mapping class="br.com.mavs.Modal.SjogadorComentario"/>
+        <mapping class="br.com.mavs.Modal.SlogAcesso"/>
+        <mapping class="br.com.mavs.Modal.StimeSegmento"/>
+        <mapping class="br.com.mavs.Modal.Stime"/>
+        <mapping class="br.com.mavs.Modal.SloginUsersTmp"/>
+        <mapping class="br.com.mavs.Modal.Spedido"/>
+        <mapping class="br.com.mavs.Modal.Sitem"/>
+        <mapping class="br.com.mavs.Modal.SitemPedido"/>
+        <mapping class="br.com.mavs.Modal.Sstatus"/>
+        <mapping class="br.com.mavs.Modal.Snotificacao"/>
+    </session-factory>
+</hibernate-configuration>

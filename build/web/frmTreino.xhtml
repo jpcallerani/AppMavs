@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="Home.xhtml">
+            <ui:define name="centro">
+                <h:form id="frm_treino">
+                    <p:growl id="growl_calendario" life="2000" showDetail="true" />
+                    <h:panelGrid id="pg_schedule" style="margin-left: 20%; width: 60%; height: 80% !important">
+                        <p:schedule id="schedule"  tooltip="true" timeFormat="HH:mm"
+                                    styleClass="font_padrao" initialDate="#{viewTreinoBean.iniDate}" timeZone="America/Sao_Paulo" ignoreTimezone="false" value="#{viewTreinoBean.eventModel}" 
+                                    draggable="false"  style="font-size: 12px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;" 
+                                    locale="pt" widgetVar="myschedule">
+
+                            <p:ajax event="dateSelect" listener="#{viewTreinoBean.onDateSelect}" update=":frm_add_treino:pg_add_treino" oncomplete="PF('eventDialog').show()" />
+                            <p:ajax event="eventSelect" listener="#{viewTreinoBean.onEventSelect}" update=":frm_alt_treino:pg_alt_treino" oncomplete="PF('alt_eventDialog').show()" />
+
+                        </p:schedule>
+                    </h:panelGrid>
+                </h:form>
+                <h:form id="frm_add_treino">
+                    <p:dialog id="dlg_eventDialog" styleClass="font_padrao" resizable="false" draggable="false" modal="true" focus="it_titulo"
+                              widgetVar="eventDialog" header="Adicionar treino" closable="false" >
+
+                        <p:panelGrid id="pg_add_treino" columns="2" styleClass="panelgridpadrao">
+
+                            <p:outputLabel value="Titulo: " />
+                            <h:panelGrid columns="1">
+                                <p:inputText id="it_titulo" value="#{viewTreinoBean.new_event.title}" size="40" maxlength="15"
+                                             required="true" requiredMessage="Titulo é obrigatório."/>
+                            </h:panelGrid>
+
+                            <p:outputLabel value="Data do treino: " />
+                            <h:panelGrid columns="1">
+                                <p:inputMask id="c_data_treino" value="#{viewTreinoBean.new_event.startDate}" readonly="true" mask="99/99/9999">
+                                    <f:convertDateTime locale="pt" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                </p:inputMask>
+                            </h:panelGrid>
+
+                            <p:outputLabel value="Hora: " />
+                            <h:panelGrid columns="1">
+                                <p:calendar id="it_hora" value="#{viewTreinoBean.new_event.endDate}" required="true" minHour="6" maxHour="21"
+                                            timeZone="GMT-3"  pattern="HH:mm" timeOnly="true" requiredMessage="Hora é obrigatória."/>
+                            </h:panelGrid>
+
+                            <p:outputLabel value="Local: " />
+                            <h:panelGrid columns="1">
+                                <p:inputText id="it_local" required="true" requiredMessage="Local é obrigatório." maxlength="15"
+                                             value="#{viewTreinoBean.new_event.description}"/> 
+                            </h:panelGrid>
+
+                            <p:spacer />
+                            <p:spacer />
+
+                            <f:facet name="footer">
+                                <p:commandButton id="cb_salvar" value="Salvar" process="@form" oncomplete="if(!args.validationFailed)PF('eventDialog').hide()" actionListener="#{viewTreinoBean.addTreino()}"
+                                                 icon="ui-icon-check" update=":frm_treino:growl_calendario pg_add_treino :frm_treino:schedule" />
+                                <p:commandButton id="cb_cancelar" icon="ui-icon-cancel" value="Fechar" process="@this" onclick="PF('eventDialog').hide()"/>
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="frm_alt_treino">
+                    <p:dialog id="dlg_alt_eventDialog" styleClass="font_padrao" resizable="false" draggable="false" modal="true" focus="it_titulo"
+                              widgetVar="alt_eventDialog" header="Alterar treino" closable="false" >
+
+                        <p:panelGrid id="pg_alt_treino" columns="2" styleClass="panelgridpadrao">
+
+                            <p:outputLabel value="Titulo: " />
+                            <h:panelGrid columns="1">
+                                <p:inputText id="it_titulo" value="#{viewTreinoBean.event.title}" size="40" 
+                                             maxlength="100" required="true" requiredMessage="Titulo é obrigatório."/>
+                            </h:panelGrid>
+
+                            <p:outputLabel value="Data do treino: " />
+                            <h:panelGrid columns="1">
+                                <p:inputMask id="c_data_treino" value="#{viewTreinoBean.event.startDate}" readonly="true" mask="99/99/9999">
+                                    <f:convertDateTime locale="pt" timeZone="GMT-3" pattern="dd/MM/yyyy" />
+                                </p:inputMask>
+                            </h:panelGrid>
+
+                            <p:outputLabel value="Hora: " />
+                            <h:panelGrid columns="1">
+                                <p:calendar id="it_hora" value="#{viewTreinoBean.event.endDate}" required="true" locale="pt" minHour="6" maxHour="21"
+                                            timeZone="GMT-3"  pattern="HH:mm" timeOnly="true" requiredMessage="Hora é obrigatória."/>
+                            </h:panelGrid>
+
+                            <p:outputLabel value="Local: " />
+                            <h:panelGrid columns="1" >
+                                <p:inputText id="it_local" required="true" requiredMessage="Local é obrigatório."
+                                             value="#{viewTreinoBean.event.description}"/>
+                            </h:panelGrid>
+
+                            <p:spacer />
+                            <p:spacer />
+
+                            <f:facet name="footer">
+                                <p:commandButton id="cb_salvar" value="Alterar" process="@form" oncomplete="PF('alt_eventDialog').hide()" actionListener="#{viewTreinoBean.updateTreino()}"
+                                                 icon="ui-icon-check" update=":frm_treino:growl_calendario pg_alt_treino :frm_treino:schedule" />
+                                <p:commandButton id="cb_delete" process="@this" update=":frm_treino:growl_calendario pg_alt_treino :frm_treino:schedule" 
+                                                 icon="ui-icon-trash" value="Deletar" oncomplete="PF('alt_eventDialog').hide()" actionListener="#{viewTreinoBean.deleteEvent()}"/>
+                                <p:commandButton id="cb_cancelar" value="Fechar" process="@this" onclick="PF('alt_eventDialog').hide()"
+                                                 icon="ui-icon-cancel"/>
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

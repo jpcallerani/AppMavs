@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="Home.xhtml">
+            <ui:define name="centro">
+                <h:form id="frm_top_jogadores">
+                    <p:fieldset legend="Top jogadores em treino." style="width: 800px !important; height: 400px;  margin-left: 25%; border: 1px solid #3e3e3e; margin-top: 30px;">
+                        <p:dataScroller id="ds_comentario" value="#{viewTopJogadores.top_jogadores}" var="jogador" chunkSize="10" mode="inline" scrollHeight="360">
+                            <h:panelGrid columns="2">
+                                <p:column  style="width:11%">
+                                    <p:graphicImage width="40" url="http://graph.facebook.com/#{jogador.senha}/picture" />
+                                </p:column>
+                                <p:column  style="width:89%">
+                                    <p:outputPanel>
+                                        <p:outputLabel  value="#{jogador.jersey} - #{viewTopJogadores.formatNumber(jogador.presenca.treino_presentes_porcentagem)}%" style="color: greenyellow;"/>
+                                    </p:outputPanel>
+                                </p:column>
+                            </h:panelGrid>
+                        </p:dataScroller>
+                    </p:fieldset>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>                    

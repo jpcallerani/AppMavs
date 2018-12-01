@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="AppMavsPU">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>br.com.mavs.Modal.SloginUsers</class>
+    <class>br.com.mavs.Modal.SpositionsOffense</class>
+    <class>br.com.mavs.Modal.Snumber</class>
+    <class>br.com.mavs.Modal.SjogadorTreino</class>
+    <class>br.com.mavs.Modal.Streino</class>
+    <class>br.com.mavs.Modal.SjogadorMensalidade</class>
+    <class>br.com.mavs.Modal.Smensalidade</class>
+    <class>br.com.mavs.Modal.Sboleto</class>
+    <class>br.com.mavs.Modal.SjogadorComentario</class>
+    <class>br.com.mavs.Modal.SlogAcesso</class>
+    <class>br.com.mavs.Modal.StimeSegmento</class>
+    <class>br.com.mavs.Modal.Stime</class>
+    <class>br.com.mavs.Modal.SloginUsersTmp</class>
+    <class>br.com.mavs.Modal.Spedido</class>
+    <class>br.com.mavs.Modal.Sitem</class>
+    <class>br.com.mavs.Modal.SitemPedido</class>
+    <class>br.com.mavs.Modal.Sstatus</class>
+    <class>br.com.mavs.Modal.Snotificacao</class>
+    <class>br.com.mavs.Modal.Snotificacao_1</class>
+    <class>br.com.mavs.Modal.Snotificacao_1_1</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <!--<property name="javax.persistence.jdbc.url" value="jdbc:mysql://10.197.69.49:3306/mundofac_1?autoReconnect=true"/>-->
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mundofac_1?autoReconnect=true"/>
+      <!--<property name="javax.persistence.jdbc.user" value="mundofacom"/>-->
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <!--<property name="javax.persistence.jdbc.password" value="[mavericks]"/>-->
+      <!--<property name="javax.persistence.jdbc.password" value="muMi@130c2"/>-->
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+    </properties>
+  </persistence-unit>
+</persistence>

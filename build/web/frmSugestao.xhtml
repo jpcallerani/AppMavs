@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="Home.xhtml">
+            <ui:define name="centro">
+                <h:form id="frm_seguestao">
+                    <p:growl id="growl_novo" showDetail="true" life="3000"/>  
+                    <p:panelGrid id="pg_resumo" style="left: 40%; margin-left: 30%" columns="1" >
+                        <p:outputLabel value="Envie sua sugestão para melhorarmos a cada dia." style="font-weight: bold; ;font-size: 15px; color: greenyellow" />
+                        <h:panelGrid columns="1">
+                            <p:inputTextarea required="true" requiredMessage="Campo obrigatório." rows="15" cols="70" 
+                                             value="#{beanSugestao.mensagem}" minQueryLength="4" />
+                        </h:panelGrid>
+                        <p:commandButton id="cb_salvar" value="Enviar" 
+                                         actionListener="#{beanSugestao.sendEmail()}" process="@form" update="growl_novo pg_resumo"/>
+                    </p:panelGrid>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

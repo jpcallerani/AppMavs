@@ -1,0 +1,49 @@
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="Home.xhtml">
+            <ui:define name="centro">
+                <h:form id="frm_baixa_mensalidade">
+                    <p:growl id="msg" showDetail="true" escape="false" />
+                    <p:fieldset legend="Escolha o jogador" style="font-size: 12px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;">  
+                        <h:panelGrid id="pg_consulta_upload" style="margin-left: 31%"> 
+                            <p:selectOneMenu  value="#{beanPagMensalidade.jogador}" id="sm_treino"
+                                              styleClass="font_padrao"  converter="userConverter"
+                                              effect="fold" effectSpeed="200" style="width:400px !important; font-size: 11px;"  
+                                              filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemLabel="Selecione" itemValue="" />
+                                <f:selectItems value="#{beanPagMensalidade.jogadores}" var="jogador" 
+                                               itemLabel="#{jogador.nome}" 
+                                               itemValue="#{jogador}"/>
+                                <p:ajax listener="#{beanPagMensalidade.findMensalidadeJogadores()}" update="pl_mensalidade"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <p:pickList id="pl_mensalidade" styleClass="font_padrao" immediate="true" value="#{beanPagMensalidade.mensalidades}" 
+                                style="margin-left: 20%; margin-top: 40px;" var="mensalidade" effect="bounce"
+                                itemValue="#{mensalidade}" itemLabel="#{mensalidade.data}" showCheckbox="true"
+                                converter="mensalConverter" showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" >
+
+                        <p:ajax event="transfer" listener="#{beanPagMensalidade.alterMensal}" update="msg" />
+
+                        <f:facet name="sourceCaption">Não Pago</f:facet>
+                        <f:facet name="targetCaption">Pago</f:facet>
+
+                        <p:column  style="width:35%">
+                            <p:outputLabel value="#{mensalidade.data}" styleClass="font_padrao" style="color: #ffffff; font-size: 12px;">
+                                <f:convertDateTime locale="pt" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                            </p:outputLabel>
+                        </p:column>                            
+                        <p:column style="width:65%;">
+                            <p:outputLabel value="valor: #{beanPagMensalidade.formatCurrency(mensalidade.valor)}" styleClass="font_padrao" style="color: #ffffff; font-size: 12px;"/>    
+                        </p:column>
+
+                    </p:pickList>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

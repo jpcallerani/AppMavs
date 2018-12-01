@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"  
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <link rel="shortcut icon" href="#{resource['images/favicon.png']}"/>
+        <title>Paulínia Mavericks!</title>
+        <h:outputStylesheet library="css" name="home.css" />
+        <h:outputScript library="js" name="locale.js" />
+        <script type="text/javascript">
+            function blink() {
+                for (var i = 0; i &lt; 3; i++) {
+                    $('.img_freq').delay(100).fadeTo(100, 0.3).delay(100).fadeTo(100, 1);
+                    $('.img_financeira').delay(100).fadeTo(100, 0.3).delay(100).fadeTo(100, 1);
+                }
+            }
+
+            $(document).ready(function () {
+                blink();
+            });
+        </script>
+    </h:head>
+    <h:body>
+        <div id="wrap">
+            <div id="header">
+                <p:ajaxStatus>
+                    <f:facet name="start">  
+                        <div id="spinner" style="display: block; cursor: wait"/>
+                        <div id="div_load" style="display: block; cursor: wait ">
+                            <div class="loading-indicator"/>
+                        </div>
+                    </f:facet>  
+
+                    <f:facet name="complete">  
+                        <div id="spinner" style="display: none; cursor: default" />
+                        <div id="div_load" style="display: none; cursor: default">
+                            <div class="loading-indicator"/>
+                        </div>
+                    </f:facet>  
+                </p:ajaxStatus>
+                <h:form id="frm_welcome" prependId="false">
+                    <h:commandLink title="Página Inicial" action="Home.xhtml?faces-redirect=true">
+                        <p:graphicImage url="#{resource['images/M_pequeno.png']}" style="margin-left: 40px; margin-top: 5px;"/>
+                    </h:commandLink>
+                    <p:outputPanel id="op_usuario" layout="block">
+                        <p:graphicImage id="img_user" style="cursor: pointer" url="#{viewHomeBean.user_facebook.pictureUrl}" />
+                        <p:overlayPanel id="imgPanel" for="img_user" showEffect="blind" hideEffect="explode" showEvent="mouseover" hideEvent="mousedown"
+                                        my="right" >
+                            <p:outputLabel id="lbl_nome" styleClass="font_padrao" style="color: #ffffff; font-size: 12px; font-weight: bold; margin-top: -20px;" 
+                                           value="#{viewHomeBean.user_facebook.firstName} #{viewHomeBean.user_facebook.lastName}" />
+                            <br></br>
+                            <p:outputLabel id="lbl_posicao" styleClass="font_padrao" style="color: #ffffff; font-size: 11px; margin-top: -20px;" 
+                                           value="#{viewHomeBean.user.posicao.position} ##{viewHomeBean.user.number}" />
+                            <br></br>
+                            <h:outputText id="lbl_localidade" styleClass="font_padrao" style="color: #ffffff; font-size: 11px; margin-top: -20px;" 
+                                          value="#{viewHomeBean.user_facebook.birthdayAsDate}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+                            </h:outputText>
+                            <br></br>
+                            <p:outputLabel id="lbl_home" styleClass="font_padrao" style="color: #ffffff; font-size: 11px; margin-top: -20px;" 
+                                           value="#{viewHomeBean.user_facebook.hometown.name}" />
+                            <br></br>
+                            <p:commandLink value="Sair" actionListener="#{viewHomeBean.logoff()}"/>
+                        </p:overlayPanel>
+                    </p:outputPanel>               
+                </h:form>
+            </div>
+            <h:form>
+                <p:growl id="messages"/>
+                <p:menubar>
+                    <p:menuitem value="Jogadores"   ajax="false"  action="frmJogadores.xhtml?faces-redirect=true" />
+                    <p:menuitem value="Lineup"      ajax="false"  action="frmLineUp.xhtml?faces-redirect=true" />
+                    <p:menuitem value="Boletos" ajax="false"  action="frmMensalidadeBoleto.xhtml?faces-redirect=true" disabled="true"/>
+                    <p:menuitem value="Pedidos" ajax="false" action="frmPedidos.xhtml?faces-redirect=true"/>
+                    <p:submenu label="Administração" rendered="#{viewHomeBean.user.admin == 1}"> 
+                        <p:submenu label="Treinos">
+                            <p:menuitem value="Cadastrar Treino"   ajax="false"  action="frmTreino.xhtml?faces-redirect=true"/>  
+                            <p:menuitem value="Presença de Treino" ajax="false"  action="frmChamadaTreino.xhtml?faces-redirect=true"/>  
+                            <p:menuitem value="Alterar Presença"   ajax="false"  action="frmChamadaTreinoAlt.xhtml?faces-redirect=true"/>  
+                            <p:menuitem value="Relatório Presença" ajax="false"  action="frmChamadaTreinoRelat.xhtml?faces-redirect=true"/>  
+                        </p:submenu>
+                        <p:submenu label="Financeiro">
+                            <p:menuitem value="Cadastrar Mensalidade" ajax="false"  action="frmMensalidade.xhtml?faces-redirect=true"/>
+                            <p:menuitem value="Baixa na Mensalidade"  ajax="false"  action="frmMensalidadePag.xhtml?faces-redirect=true"/>
+                            <p:menuitem value="Baixa Boleto"          ajax="false"  action="frmBoleto.xhtml?faces-redirect=true"/>
+                            <p:menuitem value="Relatório por Data"    ajax="false"  action="frmMensalidadeRelatData.xhtml?faces-redirect=true"/>
+                            <p:menuitem value="Relatório por Jogador" ajax="false"  action="frmMensalidadeRelatJog.xhtml?faces-redirect=true"/>
+                        </p:submenu>
+                        <p:submenu label="Pedidos">
+                            <p:menuitem value="Status dos Pedidos" ajax="false"  action="frmTPedidos.xhtml?faces-redirect=true"/>  
+                            <p:menuitem value="Alterar Pedidos"   ajax="false"  action="frmChamadaPedidosAlt.xhtml?faces-redirect=true"/>  
+                            <p:menuitem value="Relatório Pedidos" ajax="false"  action="frmChamadaPedidosRelat.xhtml?faces-redirect=true"/>  
+                        </p:submenu>
+                        <p:menuitem value="Notificações" ajax="false" rendered="#{viewHomeBean.user.admin == 1}"  action="frmNotificacao.xhtml?faces-redirect=true"/>
+                        <p:menuitem value="Log de Acesso" ajax="false" rendered="#{viewHomeBean.user.admin == 1}"  action="frmLogAcesso.xhtml?faces-redirect=true"/>
+                    </p:submenu>
+                </p:menubar>  
+            </h:form>
+            <div id="inner-wrap">
+                <div id="content" style="background-image: #{resource['images/mavs.jpg']}; background-repeat: no-repeat;">
+                    <ui:insert name="centro" >
+                        <p:outputPanel id="op_info" style="width: 79%; height: 100%; display: block; float: left; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif; font-size: 11px;">
+                            <br></br>
+                            <h:outputText class="titulo" style="margin-left: 7px !important; margin-bottom: -3px !important; font-size: 11px; " value="Paulínia Mavericks Futebol Americano" />
+                            <br></br>
+                            <p:separator />
+                            <br></br>
+                            <p:outputPanel rendered="#{viewHomeBean.user.admin == 1}" style="width: 30%; height: 350px; display: block; float: left; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif; font-size: 11px;">
+                                <br></br>
+                                <p:outputPanel style="margin-bottom: 10px; margin-top: -20px;">                            
+                                    <h:outputText class="titulo" style="font-size: 18px !important;" value="Aguardando aprovação"/>
+                                    <br></br>
+                                    <p:separator  style="width: 99%;"/>
+                                    <h:form id="frm_jogador_temp" prependId="false"> 
+                                        <p:growl id="growl_jogador_temp" showDetail="true" life="3000"/>  
+                                        <p:dataScroller id="ds_jogador_temp" value="#{viewHomeBean.jogadores_temp}" var="jogadores_temp" mode="inline" chunkSize="10">
+                                            <h:panelGrid columns="2">
+                                                <p:column  style="width:11%">
+                                                    <p:graphicImage width="30" url="http://graph.facebook.com/#{jogadores_temp.senha}/picture" />
+                                                </p:column>
+                                                <p:column  style="width:89%">
+                                                    <p:outputPanel>
+                                                        <h:panelGrid columns="2" cellpadding="3">
+                                                            <p:outputLabel  value="#{jogadores_temp.nome} " style="color: greenyellow;"/>
+                                                            <p:commandButton value="Aprovar" update=":frm_jogador_temp:growl_jogador_temp ds_jogador_temp" process="@this" actionListener="#{viewHomeBean.addUser(jogadores_temp)}"/>
+                                                            <p:outputLabel  value="#{jogadores_temp.email} " style="color: greenyellow;"/>
+                                                            <p:commandButton value="Reprovar" update=":frm_jogador_temp:growl_jogador_temp ds_jogador_temp" process="@this" actionListener="#{viewHomeBean.removeJogadorTemp(jogadores_temp)}" />
+                                                        </h:panelGrid>
+                                                    </p:outputPanel>
+                                                </p:column>
+                                            </h:panelGrid>
+                                        </p:dataScroller>
+                                    </h:form>   
+                                </p:outputPanel>
+                            </p:outputPanel>
+                            <p:fieldset id="p_jogador" legend="#{viewHomeBean.user.nome}" style="font-size: 14px; width: 300px; height: 130px; border: 1px solid #3e3e3e; margin-left: 40%">    
+                                <p:panelGrid id="pg_resumo" columns="2" style="width: 100%;" styleClass="panelgridpadrao">
+                                    <h:outputText styleClass="font_padrao" style="font-size: 13px;" value="Frequência" />
+                                    <p:graphicImage id="img_freq" styleClass="img_freq" url="#{viewHomeBean.user.presenca.treino_imagem_mes}" style="cursor: pointer"/>
+                                    <p:outputLabel/>
+                                    <p:outputLabel/>
+                                    <h:outputText styleClass="font_padrao" style="font-size: 13px;" value="Situação Financeira" />
+                                    <c:choose>
+                                        <c:when test="#{viewHomeBean.mensalidades.size() eq 0}">
+                                            <p:graphicImage id="img_financeira" styleClass="img_financeira" url="#{resource['images/verde.png']}" style="cursor: pointer"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <p:graphicImage id="img_financeira" styleClass="img_financeira" url="#{resource['images/vermelha.png']}" style="cursor: pointer"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </p:panelGrid>
+                            </p:fieldset>
+                            <p:tabView id="tv_comentario" style="margin-left: 33%; border: 1px solid #3e3e3e; top: -170px; clear: both; width: 500px; background: none">
+                                <p:tab title="Deixe seu comentário" id="tab_comentario">
+                                    <h:form id="frm_comentario">
+                                        <p:growl id="growl_comentario" showDetail="true" life="3000"/> 
+                                        <p:dataScroller id="ds_comentario" value="#{viewHomeBean.comentarios}" var="comentario" chunkSize="5" mode="inline" scrollHeight="200">
+                                            <h:panelGrid columns="2">
+                                                <p:column  style="width:11%">
+                                                    <p:graphicImage width="30" url="http://graph.facebook.com/#{comentario.idJogador.senha}/picture" />
+                                                </p:column>
+                                                <p:column  style="width:89%">
+                                                    <p:outputPanel>
+                                                        <h:panelGrid columns="2" cellpadding="3">
+                                                            <p:outputLabel  value="#{comentario.idJogador.jersey} - #{viewHomeBean.formatDate(comentario.data)}" style="color: greenyellow;"/>
+                                                            <p:commandLink rendered="#{viewHomeBean.user.admin == 1}" process="@this" update="ds_comentario :tv_comentario:frm_comentario:growl_comentario" value="excluir" title="Excluir comentário" actionListener="#{viewHomeBean.deleteComentario(comentario)}"/>
+                                                            <p:commandLink rendered="#{viewHomeBean.user.admin == 0}" value="" />
+                                                            <p:outputLabel value="#{comentario.comentario}"/>
+                                                        </h:panelGrid>
+                                                    </p:outputPanel>
+                                                </p:column>
+                                            </h:panelGrid>
+                                        </p:dataScroller>
+                                        <p:inputTextarea rows="3" cols="60" counter="display" required="true" requiredMessage="Campo obrigatório." 
+                                                         maxlength="70" counterTemplate="Você possui {0} letras."
+                                                         value="#{viewHomeBean.comentario.comentario}"/>
+                                        <p:commandButton value="Enviar" style="top: -7px;" actionListener="#{viewHomeBean.addComentario()}" update="growl_comentario frm_comentario"/>
+                                        <br></br>
+                                        <h:outputText id="display" />
+                                    </h:form>
+                                </p:tab>
+                                <p:tab id="tab_id">
+                                    <f:facet name="title">
+                                        <p:outputPanel id="op_title_notif">
+                                            <p:outputLabel value="Noticações " />
+                                            <p:outputLabel id="ol_qtde_notif" rendered="#{viewHomeBean.notificacoes.size() > 0}" value="#{viewHomeBean.notificacoes.size()}" style="font-size: 14px; color: red" />
+                                        </p:outputPanel>
+                                    </f:facet>
+                                    <h:form id="frm_notificacoes">
+                                        <p:growl id="growl_notificacoes" showDetail="true" life="3000"/> 
+                                        <p:dataScroller id="ds_notificacoes" value="#{viewHomeBean.notificacoes}" var="notificacao" chunkSize="5" mode="inline" scrollHeight="200" >
+                                            <p:panel style="font-size: 10px; ">
+                                                <f:facet name="header">
+                                                    <p:outputLabel value="Nova Mensagem #{viewHomeBean.formatOnlyDate(notificacao.data)} por: #{notificacao.criador}" style="color: greenyellow" />
+                                                </f:facet>
+                                                <h:panelGrid columns="2">
+                                                    <p:outputLabel value="#{notificacao.mensagem}" />
+                                                    <p:commandButton value="Lido" update=":tv_comentario:op_title_notif @form" immediate="true" actionListener="#{viewHomeBean.atualizaNotificacao(notificacao)}"/>
+                                                </h:panelGrid>
+                                            </p:panel>
+                                        </p:dataScroller>
+                                    </h:form>
+                                </p:tab>
+                            </p:tabView>
+                        </p:outputPanel>
+                        <p:overlayPanel id="op_freq" for="img_freq" showEffect="blind" style="width: 300px; height: 400px" hideEffect="explode" showEvent="mouseover" hideEvent="lostfocus">
+                            <p:panel id="panel_freq" styleClass="font_padrao" >
+                                <f:facet name="header">
+                                    <p:outputLabel value="Frequência detalhada / Mês Atual"/>
+                                </f:facet>
+                                <p:panelGrid columns="3" style="width: 100%" styleClass="panelgridpadrao">
+                                    <p:outputLabel value="Presença:" style="font-weight: bold; "/>
+                                    <p:outputLabel value="#{viewHomeBean.user.presenca.treino_presentes_mes}" >
+                                        <f:convertNumber maxIntegerDigits="10" />
+                                    </p:outputLabel>
+                                    <p:outputLabel value="#{viewHomeBean.formatNumber(viewHomeBean.user.presenca.treino_presentes_porcentagem_mes)}%" >
+                                        <f:convertNumber type="number" minFractionDigits="2" pattern="#0.00"/>
+                                    </p:outputLabel>
+                                    <p:outputLabel value="Falta:" style="font-weight: bold; "/>
+                                    <p:outputLabel value="#{viewHomeBean.user.presenca.treino_faltas_mes}" >
+                                        <f:convertNumber maxIntegerDigits="10" />
+                                    </p:outputLabel>                                  
+                                    <p:outputLabel value="#{viewHomeBean.formatNumber(viewHomeBean.user.presenca.treino_faltas_porcentagem_mes)}%" />      
+                                </p:panelGrid>
+                                <f:facet name="footer">
+                                    <p:outputLabel value="Em um total de: " style="font-weight: bold; font-size: 11px;"/>
+                                    <p:outputLabel style="color: greenyellow; font-weight: bold;" value="#{viewHomeBean.user.presenca.treino_total_mes}" >
+                                        <f:convertNumber maxIntegerDigits="10" />
+                                    </p:outputLabel>
+                                    <p:outputLabel value=" treino(s)." style="font-weight: bold; font-size: 11px;"/>
+                                </f:facet>
+                            </p:panel>
+                            <p:panel id="panel_freq_total" styleClass="font_padrao" >
+                                <f:facet name="header">
+                                    <p:outputLabel value="Frequência detalhada / Total"/>
+                                </f:facet>
+                                <p:panelGrid columns="3" style="width: 100%" styleClass="panelgridpadrao">
+                                    <p:outputLabel value="Presença:" style="font-weight: bold; "/>
+                                    <p:outputLabel value="#{viewHomeBean.user.presenca.treino_presentes}" >
+                                        <f:convertNumber maxIntegerDigits="10" />
+                                    </p:outputLabel>
+                                    <p:outputLabel value="#{viewHomeBean.formatNumber(viewHomeBean.user.presenca.treino_presentes_porcentagem)}%" >
+                                        <f:convertNumber type="number" minFractionDigits="2" pattern="#0.00"/>
+                                    </p:outputLabel>
+                                    <p:outputLabel value="Falta:" style="font-weight: bold; "/>
+                                    <p:outputLabel value="#{viewHomeBean.user.presenca.treino_faltas}" >
+                                        <f:convertNumber maxIntegerDigits="10" />
+                                    </p:outputLabel>                                  
+                                    <p:outputLabel value="#{viewHomeBean.formatNumber(viewHomeBean.user.presenca.treino_faltas_porcentagem)}%" />      
+                                </p:panelGrid>
+                                <f:facet name="footer">
+                                    <p:outputLabel value="Em um total de: " style="font-weight: bold; font-size: 11px;"/>
+                                    <p:outputLabel style="color: greenyellow; font-weight: bold;" value="#{viewHomeBean.user.presenca.treino_total}" >
+                                        <f:convertNumber maxIntegerDigits="10" />
+                                    </p:outputLabel>
+                                    <p:outputLabel value=" treino(s)." style="font-weight: bold; font-size: 11px;"/>
+                                </f:facet>
+                            </p:panel>
+                            <p:panel id="panel_last_treino" styleClass="font_padrao" >
+                                <f:facet name="header">
+                                    <p:outputLabel value="Último treino presente."/>
+                                </f:facet>
+                                <p:outputLabel value="#{viewHomeBean.treino.idTreino.data}">
+                                    <f:convertDateTime locale="pt" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                </p:outputLabel>
+                                <br></br>
+                                <p:outputLabel value="#{viewHomeBean.treino.idTreino.local}" style="font-weight: bold; "/>
+                            </p:panel>
+                        </p:overlayPanel>
+                        <p:overlayPanel id="op_financeira" for="img_financeira" showEffect="blind" hideEffect="explode" showEvent="mouseover" hideEvent="lostfocus">
+                            <p:panel id="panel_financeira" style="width: 300px; height: 100px">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Situação financeira"/>
+                                </f:facet>
+                                <c:choose>
+                                    <c:when test="#{viewHomeBean.mensalidades.size() eq 0}">
+                                        <p:outputLabel value="Parabéns!!! Você não possui pendências." style="font-weight: bold; color: greenyellow; font-size: 12px"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <p:outputLabel value="Você possui mensalidades em atraso. Entre no menu 'Boletos' para acertar suas pendências." 
+                                                       style="font-weight: bold; color: greenyellow; font-size: 12px"/>
+                                    </c:otherwise>
+                                </c:choose>
+                            </p:panel>
+                            <p:carousel value="#{viewHomeBean.mensalidades}" rendered="#{viewHomeBean.mensalidades.size() != 0}" itemStyle="width:300px;" style="color: #ffffff; font-size: 12px; font-weight: bold;"  
+                                        var="mensalidade" numVisible="1" easing="easeOutBounce" styleClass="carouselAdvanced">
+                                <p:panelGrid columns="4" style="width: 100%" styleClass="panelgridpadrao">
+                                    <f:facet name="header">
+                                        <p:graphicImage id="img_dolar_delete" url="#{resource['images/dolar_delete.png']}" style="margin-right: 10px; margin-bottom: -5px;"/>
+                                        <h:outputText value="#{mensalidade.descricao}" />
+                                    </f:facet>
+                                    <h:outputText value="#{mensalidade.data}" style="text-align: center">
+                                        <f:convertDateTime locale="pt" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                    <h:outputText value="#{viewHomeBean.formatCurrency(mensalidade.valor)}" style="text-align: left"/>
+                                </p:panelGrid>
+                                <f:facet name="footer">
+                                    <h:outputText value="No total de #{viewHomeBean.mensalidades.size()} mensalidade(s)." />
+                                </f:facet>
+                            </p:carousel>
+                        </p:overlayPanel>
+                        <p:outputPanel style="width: 20%; height: 350px; display: block; float: right; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif; font-size: 11px;">
+                            <br></br>
+                            <p:outputPanel style="margin-bottom: 10px;">                            
+                                <h:outputText class="titulo" value="Próximos Eventos"/>
+                                <br></br>
+                                <p:separator  style="width: 99%;"/>
+                                <ui:repeat value="#{viewHomeBean.treinos}" var="treino">
+                                    <p:fieldset>
+                                        <f:facet name="legend">
+                                            <p:graphicImage id="img_calendar" url="#{resource['images/calendar.png']}" style="margin-right: 10px; margin-bottom: -2px;"/>
+                                            <p:outputLabel value="#{treino.titulo}" styleClass="font_padrao" style="color: #ffffff; font-size: 12px;"/>
+                                        </f:facet>
+                                        <p:outputLabel value="#{treino.data}" styleClass="font_padrao" style="color: greenyellow; font-size: 11px;">
+                                            <f:convertDateTime locale="pt" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                        </p:outputLabel>
+                                        <p:outputLabel value=" - #{treino.local}" styleClass="font_padrao" style="color: greenyellow; font-size: 11px; "/>
+                                        <p:outputLabel value=" - #{viewHomeBean.formatHour(treino.data)}hrs" styleClass="font_padrao" style="color: greenyellow; font-size: 11px; "/>
+                                        <br></br>    
+                                    </p:fieldset>
+                                </ui:repeat>
+                            </p:outputPanel>
+                            <p:outputPanel style="margin-bottom: 10px;">
+                                <h:outputText class="titulo" value="Próxima Mensalidade"/>
+                                <p:separator  style="width: 99%;"/>
+                                <p:fieldset>
+                                    <f:facet name="legend">
+                                        <p:graphicImage id="img_calendar" url="#{resource['images/dolar.png']}" style="margin-right: 10px; margin-bottom: -2px;"/>
+                                        <p:outputLabel value="#{viewHomeBean.mensalidade.descricao}" styleClass="font_padrao" style="color: #ffffff; font-size: 12px;"/>    
+                                    </f:facet>
+                                    <p:outputLabel value="#{viewHomeBean.mensalidade.data}" styleClass="font_padrao" style="color: greenyellow; font-size: 11px;">
+                                        <f:convertDateTime locale="pt" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                    </p:outputLabel>
+                                    <p:outputLabel value=" - R$ #{viewHomeBean.formatCurrency(viewHomeBean.mensalidade.valor)}" styleClass="font_padrao" style="color: greenyellow; font-size: 11px; "/>                                
+                                </p:fieldset>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                    </ui:insert>
+                </div>
+            </div>
+            <p:dialog  rendered="#{viewHomeBean.user == null || viewHomeBean.user.number == 0}" styleClass="font_padrao" draggable="false" closable="false" resizable="false" 
+                       visible="true" header="Primeira vez no sistema!" widgetVar="dlg_alt" modal="true" >
+                <h:form id="frm_novo_usuario">
+                    <p:growl id="growl_novo" sticky="true" showDetail="true"/>  
+                    <p:panelGrid columns="2" styleClass="panelgridpadrao">
+
+                        <p:outputLabel value="Nome: " />
+                        <h:panelGrid columns="1">
+                            <p:inputText id="it_nome" size="50" required="true" requiredMessage="Nome é obrigatório."
+                                         value="#{viewHomeBean.new_user.nome}" />
+                        </h:panelGrid>
+
+                        <p:outputLabel value="Telefone: " />
+                        <h:panelGrid columns="1">
+                            <p:inputText id="it_telefone" styleClass="sp_celphones" required="true" requiredMessage="Telefone é obrigatório."
+                                         value="#{viewHomeBean.new_user.telefone}"/>
+                        </h:panelGrid>
+
+                        <p:outputLabel value="Nome na Jersey: " />
+                        <h:panelGrid columns="1">
+                            <p:inputText id="it_jersey" required="true" requiredMessage="Nome na Jersey é obrigatório."
+                                         value="#{viewHomeBean.new_user.jersey}"/>
+                        </h:panelGrid>
+
+                        <p:outputLabel value="Posição: " />
+                        <h:panelGrid columns="3">
+                            <p:selectOneMenu  value="#{viewHomeBean.position}" required="true" requiredMessage="Posição obrigatória!" 
+                                              styleClass="font_padrao" converter="positionConverter"
+                                              effect="fold" effectSpeed="200" style="width:160px !important; font-size: 11px;"  
+                                              filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel="Selecione" itemValue="" />
+                                <f:selectItems value="#{viewHomeBean.positions}" var="posicao" itemLabel="#{posicao.position}" itemValue="#{posicao}"/>
+                                <p:ajax  listener="#{viewHomeBean.showNumbers()}" update="it_numero" />
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Número: " />
+                            <p:selectOneMenu id="it_numero" value="#{viewHomeBean.number}" converter="numberConverter" style="width:150px !important; font-size: 200px;" 
+                                             required="true" requiredMessage="Número é obrigatório.">
+                                <f:selectItem itemLabel="Selecione" itemValue="" />
+                                <f:selectItems value="#{viewHomeBean.numbers}" var="number" itemLabel="#{number.number}" itemValue="#{number}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+
+                        <p:outputLabel value="Nascimento" />
+                        <h:panelGrid columns="1" >
+                            <p:calendar id="c_nascimento" readonlyInput="true" required="true" requiredMessage="Nascimento é obrigatório."
+                                        locale="pt" mask="true"  mindate="01/01/1900" yearRange="c-100:c+100"
+                                        navigator="true" pattern="dd/MM/yyyy"
+                                        value="#{viewHomeBean.new_user.data}" />
+                        </h:panelGrid>
+
+                        <p:outputLabel value="Email" />
+                        <h:panelGrid columns="1">
+                            <p:inputText id="it_email" size="50" required="true" requiredMessage="Email é obrigatório" validatorMessage="Invalid email format"
+                                         value="#{viewHomeBean.new_user.email}">
+                                <f:validateRegex
+                                    pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            </p:inputText>
+                        </h:panelGrid>
+
+                        <p:commandButton id="cb_salvar" value="Salvar" oncomplete="if(!args.validationFailed)PF('dlg_alt').hide()" actionListener="#{viewHomeBean.addUser()}" update="@form growl_novo :frm_welcome:op_usuario"/>
+                        <p:commandButton id="cb_cancelar" value="Cancelar" actionListener="#{viewHomeBean.logoff()}" process="@this"/>
+                    </p:panelGrid>
+                </h:form>
+            </p:dialog>
+        </div>
+        <script type="text/javascript">
+            $('.sp_celphones').focusout(function () {
+                var phone, element;
+                element = $(this);
+                element.unmask();
+                /* removo tudo que não for numeros (\D) */
+                phone = element.val().replace(/\D/g, '');
+                if (phone.length > 10) {
+                    element.mask("(99) 99999-999?9");
+                } else {
+                    element.mask("(99) 9999-9999?9");
+                }
+            }).trigger('focusout');
+        </script>  
+    </h:body>
+</html>

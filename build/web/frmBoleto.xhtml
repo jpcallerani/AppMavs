@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="Home.xhtml">
+            <ui:define name="centro">
+                <h:form id="frm_boletos">
+                    <p:growl id="growl_novo" showDetail="true" life="3000"/>  
+                    <h:panelGrid id="pg_boletos" style="width: 100%;">
+                        <p:dataTable var="boleto" id="dt_boletos" style="table-layout: fixed; font-size: 12px; margin-top: 10px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;"
+                                     paginator="true" rows="15" value="#{beanBoleto.boletos}" 
+                                     emptyMessage="Nenhum boleto encontrado."  rowKey="#{boleto.id}">
+
+                            <p:column width="3%" style="text-align: left">
+                                <p:graphicImage width="30" url="http://graph.facebook.com/#{boleto.idJogador.senha}/picture" />
+                            </p:column>
+
+                            <p:column headerText="Nome" width="15%" filterMatchMode="contains" sortBy="idJogador.nome" filterBy="idJogador.nome">  
+                                <h:outputText style=" font-size: 13px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;" value="#{boleto.idJogador.nome}" />
+                            </p:column>  
+
+                            <p:column filterBy="#{boleto.id}" headerText="Número do Boleto" width="8%" filterMatchMode="contains" filterStyle="width: 120px !important;">  
+                                <h:outputText value="#{boleto.id}" />
+                            </p:column>
+
+                            <p:column headerText="Dt Venc. Boleto" width="8%">  
+                                <h:outputText value="#{boleto.data}" >
+                                    <f:convertDateTime locale="pt" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Mensalidade" width="8%">  
+                                <h:outputText value="#{boleto.idMensalidade.data}" >
+                                    <f:convertDateTime locale="pt" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Valor" width="5%">  
+                                <h:outputText value="#{beanBoleto.formatCurrency(boleto.valor)}" />
+                            </p:column> 
+
+                            <p:column style="width:2%">
+                                <p:commandButton id="btn_edit" icon="ui-icon-check" update=":frm_boletos:pg_boletos :frm_boletos:growl_novo" actionListener="#{beanBoleto.baixaBoleto(boleto)}" title="Pagar"/>  
+                            </p:column>
+
+                            <p:column style="width:2%">
+                                <p:commandButton id="btn_delete"  icon="ui-icon-trash" update=":frm_boletos:pg_boletos :frm_boletos:growl_novo" actionListener="#{beanBoleto.deletaBoleto(boleto)}" title="Deletar"/>
+                            </p:column>
+                        </p:dataTable>  
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

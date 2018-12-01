@@ -1,0 +1,66 @@
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:body>
+        <ui:composition template="Home.xhtml">
+            <ui:define name="centro">
+                <h:form id="frm_consulta_upload">
+                    <p:growl id="msg" showDetail="true" escape="false" />
+                    <p:fieldset legend="Filtro" style="font-size: 12px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;">  
+                        <h:panelGrid id="pg_consulta_upload" style="margin-left: 31%">
+                            <p:selectOneMenu  value="#{beanMensalidadeRelat.mensalidade}" id="sm_treino"
+                                              styleClass="font_padrao"  converter="mensalConverter1"
+                                              effect="fold" effectSpeed="200" style="width:400px !important; font-size: 11px;"  
+                                              filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemLabel="Selecione" itemValue="" />
+                                <f:selectItems value="#{beanMensalidadeRelat.mensalidades}" var="mensalidade" 
+                                               itemLabel="#{beanMensalidadeRelat.formatDate(mensalidade.data)}" 
+                                               itemValue="#{mensalidade}"/>
+                                <p:ajax listener="#{beanMensalidadeRelat.findJogadoresMensalidade()}" update="dt_jogadores"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <p:panel header="Exportar">  
+                        <h:commandLink>
+                            <p:graphicImage url="#{resource['images/pdf.png']}" width="24"/>
+                            <p:dataExporter type="pdf" target="dt_jogadores" fileName="relat_#{beanMensalidadeRelat.mensalidade.data}"/>
+                        </h:commandLink>
+                    </p:panel>  
+                    <h:panelGrid id="pg_jogadores" style="width: 100%;">
+                        <p:dataTable var="jogador" id="dt_jogadores" style="table-layout: fixed; font-size: 12px; margin-top: 10px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;"
+                                     paginator="true" rows="15" value="#{beanMensalidadeRelat.jogadores}" 
+                                     emptyMessage="Nenhum jogador encontrado."  rowKey="#{jogador.id}">
+
+                            <p:column headerText="Id jogador" rendered="false">  
+                                <h:outputText value="#{jogador.id}" />
+                            </p:column>  
+
+                            <p:column headerText="Nome" width="30%" filterMatchMode="contains" sortBy="nome" filterBy="nome">  
+                                <h:outputText style=" font-size: 13px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;" value="#{jogador.nome}" />
+                            </p:column>  
+
+                            <p:column headerText="Posição" width="8%" filterStyle="width: 75px !important;" filterMatchMode="contains" sortBy="posicao.position" filterBy="posicao.position">  
+                                <h:outputText value="#{jogador.posicao.position}" />
+                            </p:column>
+
+                            <p:column headerText="Número" width="8%">  
+                                <h:outputText value="##{jogador.number}" />
+                            </p:column>
+
+                            <p:column headerText="Telefone" width="15%">  
+                                <h:outputText value="#{jogador.telefone}" />
+                            </p:column> 
+
+                            <p:column headerText="Email" width="20%" style="font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;">  
+                                <h:outputText value="#{jogador.email}" />
+                            </p:column> 
+                        </p:dataTable>
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"  
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <link rel="shortcut icon" href="#{resource['images/favicon.png']}"/>
+        <title>Paulínia Mavericks</title>
+        <h:outputStylesheet library="css" name="index.css"  />
+    </h:head>
+    <h:body>
+        <div id="header">
+            <p:outputPanel id="panel_login">
+                <h:form id="loginForm">
+                    <p:tooltip for="btn_entrar" style="font-size: 10px;" showEffect="fold" hideEffect="explode" value="Faça seu login !!!"/>
+                    <p:button id="btn_entrar" styleClass="font_padrao" value="Clique para Conectar" href="#{viewUsuario.facebookUrlAuth}" />
+                </h:form>
+            </p:outputPanel>
+        </div>
+        <div id="content">
+            <img src="#{resource['images:M1.png']}" style="display: block; margin-left: auto; margin-right: auto; margin-top: 100px;" />
+        </div>
+        <div id="footer">
+
+        </div>
+    </h:body>
+</html>
+

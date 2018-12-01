@@ -1,0 +1,56 @@
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:body>
+        <ui:composition template="Home.xhtml">
+            <ui:define name="centro">
+                <h:form id="frm_consulta_upload">
+                    <p:growl id="msg" showDetail="true" escape="false" />
+                    <p:fieldset legend="Filtro" style="font-size: 12px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;">  
+                        <h:panelGrid id="pg_consulta_upload" style="margin-left: 31%">
+                            <p:selectOneMenu  value="#{beanMensalidadeRelatJog.jogador}" id="sm_treino"
+                                              styleClass="font_padrao"  converter="userConverter"
+                                              effect="fold" effectSpeed="200" style="width:400px !important; font-size: 11px;"  
+                                              filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemLabel="Selecione" itemValue="" />
+                                <f:selectItems value="#{beanMensalidadeRelatJog.jogadores}" var="jogador" 
+                                               itemLabel="#{jogador.nome}" 
+                                               itemValue="#{jogador}"/>
+                                <p:ajax listener="#{beanMensalidadeRelatJog.findMensalidadeJogador()}" update="dt_mensalidades"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <p:panel header="Exportar">  
+                        <h:commandLink>
+                            <p:graphicImage url="#{resource['images/pdf.png']}" width="24"/>
+                            <p:dataExporter type="pdf" target="dt_mensalidades" fileName="relat_#{beanMensalidadeRelatJog.jogador.nome}"/>
+                        </h:commandLink>
+                    </p:panel>  
+                    <h:panelGrid id="pg_jogadores" style="width: 100%;">
+                        <p:dataTable var="mensalidade" id="dt_mensalidades" style="table-layout: fixed; font-size: 12px; margin-top: 10px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;"
+                                     paginator="true" rows="15" value="#{beanMensalidadeRelatJog.mensalidades}" 
+                                     emptyMessage="Nenhuma mensalidade pendente."  rowKey="#{mensalidade.id}">
+
+                            <p:column headerText="Id" rendered="false">  
+                                <h:outputText value="#{mensalidade.id}" />
+                            </p:column>  
+
+                            <p:column headerText="Data" width="50%" filterMatchMode="contains" sortBy="data" filterBy="data">  
+                                <h:outputText style=" font-size: 13px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;" 
+                                              value="#{beanMensalidadeRelatJog.formatDate(mensalidade.data)}" />
+                            </p:column>  
+
+                            <p:column headerText="Descriçao" width="50%" >  
+                                <h:outputText value="#{mensalidade.descricao}" />
+                            </p:column>
+
+                        </p:dataTable>
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

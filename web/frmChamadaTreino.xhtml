@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="Home.xhtml">
+            <ui:define name="centro">
+                <h:form id="frm_consulta_upload">
+                    <p:growl id="msg" showDetail="true" escape="false" />
+                    <p:fieldset legend="Escolha o treino" style="font-size: 12px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;">  
+                        <h:panelGrid id="pg_consulta_upload" style="margin-left: 31%"> 
+                            <p:selectOneMenu  value="#{chamadaTreinoBean.treino}" id="sm_treino" required="true" requiredMessage="Treino é obrigatório!"
+                                              styleClass="font_padrao"  converter="treinoConverter"
+                                              effect="fold" effectSpeed="200" style="width:400px !important; font-size: 11px;"  
+                                              filter="true" filterMatchMode="contains" >
+                                <f:selectItem itemLabel="Selecione" itemValue="" />
+                                <f:selectItems value="#{chamadaTreinoBean.treinos}" var="treino" itemLabel="#{chamadaTreinoBean.formatDate(treino.data)} (#{treino.titulo} - #{treino.local})" itemValue="#{treino}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <p:pickList id="pl_jogadores" styleClass="font_padrao" immediate="true" value="#{chamadaTreinoBean.jogadores}" style="margin-left: 20%; margin-top: 40px;" var="jogador" effect="bounce"
+                                itemValue="#{jogador}" itemLabel="#{jogador.nome}" showSourceControls="true" showTargetControls="true" showCheckbox="true"
+                                converter="userConverterPL" showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" >
+
+                        <f:facet name="sourceCaption">Jogadores</f:facet>
+                        <f:facet name="targetCaption">Presentes</f:facet>
+
+                        <p:column  style="width:11%">
+                            <p:graphicImage width="30" url="http://graph.facebook.com/#{jogador.senha}/picture" />
+                        </p:column>                            
+                        <p:column style="width:84%;">
+                            <h:outputText value=" ##{jogador.number} - #{jogador.usuario}" />
+                        </p:column>
+
+                    </p:pickList>
+                    <p:commandButton value="Salvar" icon="ui-icon-check" style="margin-right: 25.5%;float: right"
+                                     actionListener="#{chamadaTreinoBean.addChamada()}" process="@form" update="msg pl_jogadores pg_consulta_upload"/>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

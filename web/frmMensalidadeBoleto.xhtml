@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="Home.xhtml">
+            <ui:define name="centro">
+                <h:form id="frm_boleto">
+                    <p:growl id="msg" showDetail="true" escape="false" />
+                    <p:fieldset legend="Escolha os mêses a serem pagos." style="font-size: 12px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;">  
+
+                        <p:outputPanel style="margin-left: 35%;">
+                            <p:outputLabel value="1 - Selecione ou arraste a mensalidade a ser paga." /><br></br>
+                            <p:outputLabel value="2 - Clique em gerar boleto." /><br></br>
+                            <p:outputLabel value="3 - Faça o pagamento na agência mais próxima." /><br></br><br></br>
+                            <p:outputLabel value="Obs:" style="font-weight: bold" /><br></br>
+                            <p:outputLabel value="É obrigatório a geração de um boleto por mensalidade, sendo" style="font-weight: bold" /><br></br>
+                            <p:outputLabel value="assim impossível selecionar mais que duas mensalidades por vez." style="font-weight: bold" /><br></br>
+                        </p:outputPanel>
+
+                        <p:pickList id="pl_mensalidade" styleClass="font_padrao" immediate="true" value="#{beanMensalidadeBoleto.mensalidades}" 
+                                    style="margin-left: 20%; margin-top: 40px;" var="mensalidade" effect="bounce"
+                                    itemValue="#{mensalidade}" itemLabel="#{mensalidade.data}" showCheckbox="true"
+                                    converter="mensalConverter" showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" >
+
+                            <f:facet name="sourceCaption">Mensalidades</f:facet>
+                            <f:facet name="targetCaption">Pagar</f:facet>
+
+                            <p:column  style="width:35%">
+                                <p:outputLabel value="#{mensalidade.data}" styleClass="font_padrao" style="color: #ffffff; font-size: 12px;">
+                                    <f:convertDateTime locale="pt" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                </p:outputLabel>
+                            </p:column>                            
+                            <p:column style="width:65%;">
+                                <p:outputLabel value="valor: #{beanMensalidadeBoleto.formatCurrency(mensalidade.valor)}" styleClass="font_padrao" style="color: #ffffff; font-size: 12px;"/>    
+                            </p:column>
+
+                        </p:pickList>
+                        <p:commandButton value="Gerar Boleto" icon="ui-icon-check" style="margin-right: 28%;float: right"
+                                         actionListener="#{beanMensalidadeBoleto.geraBoleto()}" update="msg pl_mensalidade dlg_down">
+                        </p:commandButton>
+                        <p:dialog id="dlg_down" widgetVar="dlg_down" modal="true" resizable="false" draggable="false">
+                            <f:facet name="header">
+                                <p:outputLabel value="Faça o download do seu boleto."/>
+                            </f:facet>
+                            <p:commandButton ajax="false" value="Download" onclick="PF('dlg_down').hide()" style="margin-left: 27%">
+                                <p:fileDownload value="#{beanMensalidadeBoleto.streamedContent}" />
+                            </p:commandButton>    
+                        </p:dialog>
+                    </p:fieldset>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="Home.xhtml">
+            <ui:define name="centro">
+                <h:form id="frm_mensalidade">
+                    <p:growl id="growl_calendario" life="2000" showDetail="true" />
+                    <h:panelGrid id="pg_schedule" style="margin-left: 20%; width: 60%; height: 80% !important">
+                        <p:schedule id="schedule_mensalidade"  tooltip="true" styleClass="font_padrao" timeZone="America/Sao_Paulo" ignoreTimezone="false" 
+                                    value="#{beanMensalidade.eventModel}"  style="font-size: 12px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;" 
+                                    locale="pt" widgetVar="myschedule" draggable="false" initialDate="#{beanMensalidade.iniDate}">
+
+                            <p:ajax event="dateSelect" listener="#{beanMensalidade.onDateSelect}" update=":frm_add_mensalidade:pg_add_mensalidade" oncomplete="PF('eventDialog').show()" />
+                            <p:ajax event="eventSelect" listener="#{beanMensalidade.onEventSelect}" update=":frm_alt_mensalidade:pg_alt_mensalidade" oncomplete="PF('alt_eventDialog').show()" />
+
+                        </p:schedule>
+                    </h:panelGrid>
+                </h:form>
+                <h:form id="frm_add_mensalidade">
+                    <script>
+                        function mascara(o, f) {
+                            v_obj = o;
+                            v_fun = f;
+                            setTimeout("execmascara()", 1);
+                        }
+
+                        function execmascara() {
+                            v_obj.value = v_fun(v_obj.value);
+                        }
+
+                        function valor(v) {
+                            v = v.replace(/\D/g, "");
+                            v = v.replace(/[0-9]{15}/, "inválido");
+                            v = v.replace(/(\d{1})(\d{11})$/, "$1.$2"); // coloca ponto antes dos  
+                            // Ãºltimos 11 digitos  
+                            v = v.replace(/(\d{1})(\d{8})$/, "$1.$2"); // coloca ponto antes dos  
+                            // Ãºltimos 8 digitos  
+                            v = v.replace(/(\d{1})(\d{5})$/, "$1.$2"); // coloca ponto antes dos  
+                            // Ãºltimos 5 digitos  
+                            v = v.replace(/(\d{1})(\d{1,2})$/, "$1,$2"); // coloca virgula antes dos  
+                            // Ãºltimos 2 digitos  
+                            return v;
+                        }
+
+                    </script>  
+                    <p:dialog id="dlg_eventDialog" styleClass="font_padrao" resizable="false" draggable="false" modal="true" focus="it_titulo"
+                              widgetVar="eventDialog" header="Adicionar mensalidade" closable="false">
+
+                        <p:panelGrid id="pg_add_mensalidade" columns="2" styleClass="panelgridpadrao">
+
+                            <p:outputLabel value="Titulo: " />
+                            <h:panelGrid columns="1">
+                                <p:inputText id="it_titulo" value="#{beanMensalidade.new_event.title}" size="40" maxlength="30"
+                                             required="true" requiredMessage="Titulo é obrigatório."/>
+                            </h:panelGrid>
+
+                            <p:outputLabel value="Data da mensalidade: " />
+                            <h:panelGrid columns="1">
+                                <p:inputMask id="c_data_mensalidade" value="#{beanMensalidade.new_event.startDate}" readonly="true" mask="99/99/9999">
+                                    <f:convertDateTime locale="pt" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                </p:inputMask>
+                            </h:panelGrid>
+
+                            <p:outputLabel value="Valor: " />
+                            <h:panelGrid columns="1">
+                                <p:inputText id="it_local" required="true" requiredMessage="Valor é obrigatório." maxlength="15"
+                                             value="#{beanMensalidade.new_event.description}" onkeypress="mascara(this, valor);"/> 
+                            </h:panelGrid>
+
+                            <p:spacer />
+                            <p:spacer />
+
+                            <f:facet name="footer">
+                                <p:commandButton id="cb_salvar" value="Salvar" process="@form" oncomplete="if(!args.validationFailed)PF('eventDialog').hide()" actionListener="#{beanMensalidade.addMensalidade()}"
+                                                 icon="ui-icon-check" update=":frm_mensalidade:growl_calendario pg_add_mensalidade :frm_mensalidade:schedule_mensalidade" />
+                                <p:commandButton id="cb_cancelar" icon="ui-icon-cancel" value="Fechar" process="@this" onclick="PF('eventDialog').hide()"/>
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="frm_alt_mensalidade">
+                    <p:dialog id="dlg_alt_eventDialog" styleClass="font_padrao" resizable="false" draggable="false" modal="true" focus="it_titulo"
+                              widgetVar="alt_eventDialog" header="Alterar mensalidade" closable="false">
+
+                        <p:panelGrid id="pg_alt_mensalidade" columns="2" styleClass="panelgridpadrao">
+
+                            <p:outputLabel value="Titulo: " />
+                            <h:panelGrid columns="1">
+                                <p:inputText id="it_titulo" value="#{beanMensalidade.event.title}" size="40" 
+                                             maxlength="100" required="true" requiredMessage="Titulo é obrigatório."/>
+                            </h:panelGrid>
+
+                            <p:outputLabel value="Data da mensalidade: " />
+                            <h:panelGrid columns="1">
+                                <p:inputMask id="c_data_mensalidade" value="#{beanMensalidade.event.startDate}" readonly="true" mask="99/99/9999">
+                                    <f:convertDateTime locale="pt" timeZone="GMT-3" pattern="dd/MM/yyyy" />
+                                </p:inputMask>
+                            </h:panelGrid>
+
+                            <p:outputLabel value="Valor: " />
+                            <h:panelGrid columns="1" >
+                                <p:inputText id="it_local" required="true" requiredMessage="Local é obrigatório."
+                                             value="#{beanMensalidade.event.description}">
+
+                                </p:inputText>
+                            </h:panelGrid>
+
+                            <p:spacer />
+                            <p:spacer />
+
+                            <f:facet name="footer">
+                                <p:commandButton id="cb_salvar" value="Alterar" process="@form" oncomplete="PF('alt_eventDialog').hide()" actionListener="#{beanMensalidade.updateMensalidade()}"
+                                                 icon="ui-icon-check" update=":frm_mensalidade:growl_calendario pg_alt_mensalidade :frm_mensalidade:schedule_mensalidade" />
+                                <p:commandButton id="cb_delete" process="@this" update=":frm_mensalidade:growl_calendario pg_alt_mensalidade :frm_mensalidade:schedule_mensalidade" 
+                                                 icon="ui-icon-trash" value="Deletar" oncomplete="PF('alt_eventDialog').hide()" actionListener="#{beanMensalidade.deleteEvent()}"/>
+                                <p:commandButton id="cb_cancelar" value="Fechar" process="@this" onclick="PF('alt_eventDialog').hide()"
+                                                 icon="ui-icon-cancel"/>
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

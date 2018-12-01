@@ -1,0 +1,233 @@
+@font-face {
+    font-family: 'Bree Serif';
+    font-style: normal;
+    font-weight: 400;
+    src: url("#{resource['font:Bree Serif.woff']}");
+}
+
+.preformatted {
+    white-space: pre-wrap;
+}
+
+.font_padrao {
+    font-family: Lucida Grande,Lucida Sans,Arial,sans-serif !important;
+}
+
+.titulo {
+    left: 10px;
+    color: greenyellow !important;
+    -webkit-margin-before: 0.67em !important;
+    -webkit-margin-after: 0.67em !important;
+    -webkit-margin-start: 0px !important;
+    -webkit-margin-end: 0px !important;
+    font-weight: bold !important;
+    font-family: 'Bree Serif', serif !important;
+    font-weight: 300 !important;
+    font-size: 20px !important;
+    line-height:34px !important;
+}
+
+.sub_titulo {
+    left: 10px;
+    color: greenyellow !important;
+    -webkit-margin-before: 0.67em !important;
+    -webkit-margin-after: 0.67em !important;
+    -webkit-margin-start: 0px !important;
+    -webkit-margin-end: 0px !important;
+    font-weight: bold !important;
+    font-family: 'Bree Serif', serif !important;
+    font-weight: 300 !important;
+    font-size: 15px !important;
+    line-height:34px !important;
+}
+
+.escrita {
+    left: 10px;
+    color: orange !important;
+    -webkit-margin-before: 0.67em !important;
+    -webkit-margin-after: 0.67em !important;
+    -webkit-margin-start: 0px !important;
+    -webkit-margin-end: 0px !important;
+    font-weight: bold !important;
+    font-family: 'Bree Serif', serif !important;
+    font-weight: 300 !important;
+    font-size: 12px !important;
+    line-height:34px !important;
+    text-shadow: 1px 1px 0 rgba(256,256,256,1.0) !important;
+}
+
+.obrigatorio {
+    font-weight: bold;
+    color: #3333ff;
+}
+
+#erro {
+    font-size: 14px;
+}
+
+.ui-growl {
+    z-index: 999999 !important;
+}
+
+.ui-growl-message {
+    font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;
+    font-weight: normal;
+    font-size: 13px;
+    letter-spacing: -1px;
+}
+
+.ui-fieldset-legend {
+    background:none !important;
+    border:  none !important;
+    color: greenyellow !important
+}
+
+.ui-fieldset {
+    background:none !important;
+}
+
+.ui-menubar .ui-menuitem-link {
+    font-size: 13px; 
+    border-top: none !important; 
+    font-weight: bold; 
+    font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;
+    margin-left: 5px;
+}
+
+.ui-selectonemenu  {
+    font-size: 12px !important;
+    width: 400px !important;
+}
+
+.ui-selectonemenu-item {
+    font-size: 11px !important;
+}
+
+.ui-column-filter {
+    font-size: 12px !important;
+    width: 250px !important;    
+}
+
+.fc-header-center {
+    color: greenyellow !important;
+}
+
+.fc-event-time {
+    color: black !important;
+}
+
+.fc-event-title {
+    color: black !important;
+    font-weight: bold;
+}
+
+.fc-event {
+    background-color: greenyellow !important; 
+    border-color: greenyellow !important;
+}
+
+.ui-selectonemenu-filter {
+    font-size: 12px !important;
+    width: 350px !important;
+}
+
+.ui-datascroller-content {
+    background: none !important;
+    border: none !important;
+}
+
+#op_usuario {
+    float: right !important;
+    margin-right: 80px;
+    margin-top: 20px;
+}
+
+.ui-layout-unit-content {
+    background: none;
+}
+
+html {height:100%;}
+
+body {
+    margin:0; 
+    padding:0; 
+    height:100%;
+    background-image: url("#{resource['images:old.png']}");
+}
+#header {
+    height: 100px;
+    background-image: url("#{resource['images:bg_index.png']}");
+}
+
+#wrap {
+    min-height:100%;
+    position:relative;
+}
+* html #wrap {height:100%}
+
+#inner-wrap {
+    padding-bottom: 80px;
+    background-image: url("#{resource['images:old.png']}");
+}
+#inner-wrap:after {
+    content:" ";
+    display:block;
+    clear:both;
+}
+* html #inner-wrap {
+    height:1px;
+}
+
+.ui-picklist-list {
+    text-align: left;
+    height:300px !important;
+    width:350px !important;
+}
+
+.panelgridpadrao tr, .panelgridpadrao td {
+    border: transparent;
+}
+
+#pg_resumo.panelgridpadrao tr, #pg_resumo.panelgridpadrao td {
+   border: transparent;
+    background: none;
+}
+
+#spinner {
+    width: 100%;
+    height: 100%;
+    display: none;
+    position: fixed;
+    text-align:center;
+    z-index:2;
+    overflow: auto;
+    background: black;
+    opacity:0.6;
+    z-index: 1;
+    z-index: 999998;
+}  
+
+#div_load {
+    height: 50px;
+    width: 250px;
+    position: fixed;
+    right: 2%;
+    bottom: 0;
+    background-color: #3e3e3e;
+    -moz-border-radius: 25px 10px / 10px 25px;
+    border-radius: 25px 10px / 10px 25px;
+    z-index: 999999;
+}
+
+.loading-indicator {
+    background-repeat: no-repeat;
+    height: 19px;
+    width: 220px;
+    margin-top: 18px;
+    margin-left: 14px;
+    background-image: url("#{resource['images:loading2.gif']}");
+}
+
+#frm_mensalidade .fc-event-time{
+    display:none;
+}

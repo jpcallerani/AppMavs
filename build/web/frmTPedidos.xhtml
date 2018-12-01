@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="Home.xhtml">
+            <ui:define name="centro">
+                <h:form id="frm_pedidos">
+                    <p:growl id="growl_pedido" life="2000" showDetail="true" />
+                    <p:dataTable var="pedido" id="dt_pedidos" style="table-layout: fixed; font-size: 12px; margin-top: 10px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;"
+                                 paginator="true" rows="15" value="#{beanTPedidos.pedidos}"
+                                 selection="#{beanTPedidos.pedido_selecionado}"
+                                 selectionMode="single" widgetVar="pedido_table"
+                                 emptyMessage="Você ainda não fez nenhum pedido."  rowKey="#{pedido.id}">
+                        <p:column headerText="Id pedido" width="5%" filterBy="#{pedido.id}">  
+                            <h:outputText value="#{pedido.id}" />
+                        </p:column>  
+
+                        <p:column headerText="Jogador" filterBy="#{pedido.idUsuario.nome}" width="5%" style="text-align: center">
+                            <p:graphicImage id="img_user" width="20" url="http://graph.facebook.com/#{pedido.idUsuario.senha}/picture" />
+                            <p:overlayPanel id="imgPanel" for="img_user" showEffect="blind" hideEffect="explode" showEvent="mouseover" hideEvent="mouseout"
+                                            my="right" >
+                                <p:outputLabel id="lbl_nome" styleClass="font_padrao" style="color: #ffffff; font-size: 12px; font-weight: bold; margin-top: -20px;" 
+                                               value="#{pedido.idUsuario.nome}" />
+                            </p:overlayPanel>
+                        </p:column>  
+
+                        <p:column headerText="Data" width="5%" filterStyle="width: 75px !important;">  
+                            <h:outputText value="#{beanTPedidos.formatDate(pedido.data)}" />
+                        </p:column>
+
+                        <p:column headerText="Observação" width="20%">   
+                            <h:outputText value="#{pedido.observacao}" />
+                        </p:column>
+
+                        <p:column filterBy="#{pedido.idStatus}" headerText="Status do Pedido" width="30%" filterMatchMode="contains">
+                            <f:facet name="filter">
+                                <p:selectOneMenu filter="true" onchange="PF('pedido_table').filter()" >
+                                    <f:selectItem itemLabel="Selecione" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItems value="#{beanTPedidos.status}" var="status" itemLabel="#{status.nome}" itemValue="#{status}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <h:outputText value="#{pedido.idStatus.nome}" />
+                        </p:column>
+
+                        <p:column headerText="Valor do Pedido" width="10%">
+                            <h:outputText value="#{beanTPedidos.formatCurrency(pedido.valor)}" />
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Visualizar pedido selecionado" update=":frm_detalhe_pedido:detalhe_pedido" oncomplete="PF('datalhe').show()" icon="ui-icon-search" title="Visualizar Pedido"/>
+                        </f:facet>
+                    </p:dataTable>  
+                </h:form>
+                <h:form id="frm_detalhe_pedido" prependId="false">
+                    <p:dialog id="detalhe_pedido" widgetVar="datalhe" modal="true" closable="false" showEffect="fade" hideEffect="fade" resizable="false">
+                        <f:facet name="header">
+                            <h:outputText value="Código do Pedido: " />
+                            <h:outputText  value="#{beanTPedidos.pedido_selecionado.id}" />
+                        </f:facet>             
+                        <p:outputPanel id="carDetail" style="font-size: 12px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif; width: 400px">
+                            <h:outputText  value="Data: "/>
+                            <h:outputText value="#{beanTPedidos.formatDate(beanTPedidos.pedido_selecionado.data)}" />
+                            <br></br>
+                            <br></br>
+                            <p:dataTable var="itens_pedido" id="dt_itens_pedidos" style="table-layout: fixed; font-size: 12px; margin-top: 10px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;"
+                                         paginator="true" rows="3" value="#{beanTPedidos.pedido_selecionado.sitemPedidoList}" 
+                                         selectionMode="single"
+                                         emptyMessage="Não há itens relacionado a esse pedido."  rowKey="#{itens_pedido.id}">
+                                <p:column headerText="Id pedido" rendered="false">  
+                                    <h:outputText value="#{itens_pedido.id}" />
+                                </p:column>  
+
+                                <p:column headerText="Nome do Item" width="50%">  
+                                    <h:outputText style=" font-size: 13px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;" value="#{itens_pedido.idItem.nome}" />
+                                </p:column>  
+
+                                <p:column headerText="Quantidade" width="25%" >
+                                    <p:outputLabel value="#{itens_pedido.quantidade}" />
+                                </p:column>
+                            </p:dataTable>
+                            <br></br>
+                            <p:outputLabel for="status" value="Status do Pedido: " />
+                            <p:selectOneMenu id="status" converter="statusConverter" rendered="#{beanTPedidos.statusPedido()}" value="#{beanTPedidos.status_selecionado}" effect="fold">
+                                <f:selectItem itemLabel="#{beanTPedidos.pedido_selecionado.idStatus.nome}"  itemValue="" />
+                                <f:selectItems value="#{beanTPedidos.status}" var="status" itemLabel="#{status.nome}" itemValue="#{status}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="#{beanTPedidos.pedido_selecionado.idStatus.nome}" style="font-size: 16px; color: greenyellow; font-weight: bold;" rendered="#{!beanTPedidos.statusPedido()}"/>
+                            <br></br>
+                            <br></br>
+                            <p:commandButton value="Salvar" icon="ui-icon-disk" rendered="#{beanTPedidos.statusPedido()}" 
+                                             onclick="PF('datalhe').hide()" title="Salvar" 
+                                             update=":frm_pedidos:dt_pedidos :frm_pedidos:growl_pedido"
+                                             actionListener="#{beanTPedidos.AlteraPedido()}"/>
+                            <p:commandButton value="Cancelar" icon="ui-icon-cancel" 
+                                             onclick="PF('datalhe').hide()" title="Cancelar" 
+                                             actionListener="#{beanTPedidos.cancelaPedidoSelecionado()}"/>
+                        </p:outputPanel>
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

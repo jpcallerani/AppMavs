@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="Home.xhtml">
+            <ui:define name="centro">
+                <h:form id="frm_notificacao">
+                    <p:growl id="growl_notificacao" showDetail="true" life="3000"/>  
+                    <p:fieldset legend="Envie uma mensagem a um jogador" style="font-size: 12px; font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;">
+                        <h:panelGrid id="pg_notific" columns="2">
+                            <p:outputLabel value="Destinatário:" />
+                            <p:selectOneMenu  value="#{beanNotificacao.user}" id="sm_treino"
+                                              styleClass="font_padrao"  converter="userConverter"
+                                              effect="fold" effectSpeed="200" style="width:400px !important; font-size: 11px;"  
+                                              filter="true" filterMatchMode="contains" 
+                                              required="true" requiredMessage="Destinatário obrigatório.">
+                                <f:selectItem itemLabel="Selecione o Destinatário" itemValue="" />
+                                <f:selectItems value="#{beanNotificacao.users}" var="jogador" 
+                                               itemLabel="#{jogador.nome}" 
+                                               itemValue="#{jogador}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Mensagem:"/>
+                            <p:inputTextarea required="true" requiredMessage="Campo obrigatório." rows="15" cols="70" 
+                                             value="#{beanNotificacao.notificacao.mensagem}" minQueryLength="4" maxlength="100"/>
+                        </h:panelGrid>
+                        <p:commandButton id="cb_salvar" value="Enviar" 
+                                         process="@form" update="growl_notificacao pg_notific" actionListener="#{beanNotificacao.insereNotificacao()}"/>
+                        <p:commandButton id="cb_cancel" value="Cancelar" actionListener="#{beanNotificacao.reset()}" update="pg_notific"/>
+                    </p:fieldset>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

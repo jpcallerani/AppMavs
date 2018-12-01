@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="Home.xhtml">
+            <ui:define name="centro">
+                <h:form id="frm_log_acesso">
+                    <p:fieldset legend="Log dos últimos acessos." style="width: 800px !important; height: 500px;  margin-left: 23%; border: 1px solid #3e3e3e; margin-top: 10px;">
+                        <p:dataList id="dl_log_acesso" value="#{viewLogAcesso.log_acesso}" style="background: transparent !important;" var="log_acesso" type="definition" itemType="none" paginator="true" rows="9" styleClass="paginated">
+                            <f:facet name="header">
+                                Jogadores
+                            </f:facet>
+                            <p:panel style="background: transparent !important;">
+                                <p:graphicImage style="margin-bottom: -5px !important; margin-right: 10px;" width="20" url="http://graph.facebook.com/#{log_acesso.idJogador.senha}/picture" />
+                                <h:outputText  value="#{log_acesso.idJogador.nome} - #{log_acesso.idJogador.jersey} - #{viewLogAcesso.formatDate(log_acesso.data)}"/>
+                            </p:panel>
+                        </p:dataList>
+                    </p:fieldset>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>                    
